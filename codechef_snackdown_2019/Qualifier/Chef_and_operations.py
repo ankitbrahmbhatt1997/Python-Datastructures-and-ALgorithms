@@ -7,7 +7,7 @@ for i in range(t):
     A = list(map(int, stdin.readline().strip().split(" ")))
     B = list(map(int, stdin.readline().strip().split(" ")))
     c = 0
-
+    result = ""
     while c < len(A)-3:
         d = 1
         j = c
