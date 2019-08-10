@@ -14,6 +14,7 @@ def array_pair_sum(arr, k):
         target = k-num
         if target in seen:
             result.add((num, target))
+            break
         else:
             seen.add(num)
 
