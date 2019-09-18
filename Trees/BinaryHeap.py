@@ -20,7 +20,7 @@ class BinaryHeap:
         self.heapList.append(element)
         self.currentSize += 1
         self.percolate_up(self.currentSize-1)
-
+ 
    
     def max_child(self,i):
         if ((i*2)+2) > self.currentSize-1:
@@ -38,7 +38,7 @@ class BinaryHeap:
             maxChild = self.max_child(i)
             if self.heapList[i] < self.heapList[maxChild]:
                 temp = self.heapList[i]
-                self.heapList[i] = self.heapList[maxChild]
+                self.heapList[i] = self.heapList[maxChild] 
                 self.heapList[maxChild]=temp
             i = maxChild
 
