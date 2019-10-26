@@ -21,10 +21,8 @@ class MaxHeap:
         self.currentSize += 1
         self.percolate_up(self.currentSize-1)
     
-
     def peek(self):
         return self.heapList[0]
- 
    
     def max_child(self,i):
         if ((i*2)+2) > self.currentSize-1:
@@ -98,6 +96,14 @@ class MinHeap:
         self.heapList.pop()
         self.currentSize-= 1
         self.siftDown(i)
+    
+    def delete_min(self):
+        self.heapList[0] = self.heapList[self.currentSize-1]
+        self.heapList.pop()
+        self.currentSize -= 1
+        self.siftDown(0)
+
+    
 
     def peek(self):
         return self.heapList[0]

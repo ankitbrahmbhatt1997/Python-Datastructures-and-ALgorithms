@@ -1,6 +1,6 @@
-# Binary Heap using a list
-# Normally pointers are required but because binary heap is a complete Binary Tree, children and parents can be calculated using arithmetic operations
 
+from sys import stdin
+from collections import defaultdict
 
 class MaxHeap:
     def __init__(self):
@@ -63,56 +63,76 @@ class MaxHeap:
             self.percolate_down(i-1)
             i=i-1
 
+
+
+
+
+
+
+def calculate_minimum_sadness(N, D,info_dict):
+    # info.sort()
+    pq=MaxHeap()
+    for i in range(D):
+        
+        # while info and info[0][0] <= i+1:
+        #     pq.insert_element(info.pop(0)[::-1])
+
+        if i+1 in info_dict:
+            
+            if len(info_dict[i+1]) == 1:
+                
+                pq.insert_element((info_dict[i+1][0][1],info_dict[i+1][0][0],i+1))  
+            elif len(info_dict[i+1]) > 1:
+                
+                for j in info_dict[i+1]:
+                    
+                    pq.insert_element((j[1],j[0],i+1)) 
+
+            
+        if pq.currentSize > 0:
+            pq.heapList=teach_a_lecture(pq)
     
-
-class MinHeap:
-    def __init__(self):
-        self.heapList = []
-        self.currentSize = 0
-
-
-
-    def insert_element(self,element):
-        self.heapList.append(element)
-        self.currentSize+=1
-        self.siftUp(self.currentSize-1)
-
-    def siftUp(self,i):
-        while((i-1)//2)>=0:
-
-            if self.heapList[i]<self.heapList[(i-1)//2]:
-                self.heapList[i],self.heapList[(i-1)//2]=self.swap(self.heapList[i],self.heapList[(i-1)//2])
-
-            i = (i-1)//2
-
-    def siftDown(self,i):
-        while ((i*2)+1) < self.currentSize:
-            minChild = self.min_child(i)
-            if self.heapList[i] > self.heapList[minChild]:
-                self.heapList[i],self.heapList[minChild]=self.swap(self.heapList[i],self.heapList[minChild])
-            i=minChild
-
-    def delete_element(self,element):
-        i = self.heapList.index(element)
-        self.heapList[i] = self.heapList[self.currentSize-1]
-        self.heapList.pop()
-        self.currentSize-= 1
-        self.siftDown(i)
-
-    def peek(self):
-        return self.heapList[0]
+   
+    minimumSadness=0
+    for j in pq.heapList:
+        minimumSadness+= j[0]*j[1]
+    return minimumSadness
 
 
 
-    def min_child(self,i):
-        if ((i*2)+2) > self.currentSize-1:
-            return (i*2)+1
+
+def teach_a_lecture(pq):
+    heapList = pq.heapList
+    if heapList[0][1] > 1:
+        reducedDay = list(heapList[0])
+        reducedDay[1] = reducedDay[1]-1
+        pq.heapList[0] = tuple(reducedDay)
+    else:
+        pq.delete_max()
+    
+    return pq.heapList
+
+
+
+
+
+t = int(stdin.readline())
+for i in range(t):
+    N, D = map(int, stdin.readline().strip("").split(" "))
+    
+    info_dict=defaultdict(list)
+    for j in range(N):
+        d, t, s = map(int, stdin.readline().strip().split(" "))
+        
+        if d in info_dict:
+           
+            ne = info_dict[d]
+            ne.append((t,s))
+            
+            info_dict[d] = ne
         else:
-            if self.heapList[(i*2)+1] < self.heapList[(i*2)+2]:
-                return (i*2)+1
-            else:
-                return (i*2)+2
+            
+            info_dict[d] = [(t,s)]
 
-    def swap(self,element1,element2):
-        element1,element2=element2,element1
-        return element1,element2
+        
+    print(calculate_minimum_sadness(N, D,info_dict))

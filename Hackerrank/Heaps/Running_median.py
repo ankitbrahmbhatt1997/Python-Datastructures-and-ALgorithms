@@ -1,7 +1,4 @@
-# Binary Heap using a list
-# Normally pointers are required but because binary heap is a complete Binary Tree, children and parents can be calculated using arithmetic operations
-
-
+from sys import stdin
 class MaxHeap:
     def __init__(self):
         self.heapList = []
@@ -21,10 +18,8 @@ class MaxHeap:
         self.currentSize += 1
         self.percolate_up(self.currentSize-1)
     
-
     def peek(self):
         return self.heapList[0]
- 
    
     def max_child(self,i):
         if ((i*2)+2) > self.currentSize-1:
@@ -98,6 +93,14 @@ class MinHeap:
         self.heapList.pop()
         self.currentSize-= 1
         self.siftDown(i)
+    
+    def delete_min(self):
+        self.heapList[0] = self.heapList[self.currentSize-1]
+        self.heapList.pop()
+        self.currentSize -= 1
+        self.siftDown(0)
+
+    
 
     def peek(self):
         return self.heapList[0]
@@ -116,3 +119,37 @@ class MinHeap:
     def swap(self,element1,element2):
         element1,element2=element2,element1
         return element1,element2
+
+
+
+
+
+n = int(stdin.readline())
+
+median=0
+minHeap = MinHeap()
+maxHeap = MaxHeap()
+for _ in range(n):
+    value = int(stdin.readline())
+    if value > median:
+        minHeap.insert_element(value)
+    else:
+        maxHeap.insert_element(value)
+    
+    if maxHeap.currentSize > minHeap.currentSize and maxHeap.currentSize - minHeap.currentSize >1:
+        minHeap.insert_element(maxHeap.peek())
+        maxHeap.delete_max()
+    elif minHeap.currentSize > maxHeap.currentSize and minHeap.currentSize - maxHeap.currentSize >1:
+        maxHeap.insert_element(minHeap.peek())
+        minHeap.delete_min()
+    if maxHeap.currentSize == minHeap.currentSize:
+        median= (maxHeap.peek() + minHeap.peek())/2
+    elif maxHeap.currentSize > minHeap.currentSize:
+        median = maxHeap.peek()
+    else:
+        median = minHeap.peek()
+    
+    print("%.1f"%median)
+
+
+
