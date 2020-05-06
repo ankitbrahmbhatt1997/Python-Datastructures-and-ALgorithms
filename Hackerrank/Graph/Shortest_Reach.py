@@ -1,4 +1,5 @@
 from heapq import heappush,heappop,heapify
+from sys import stdin
 
 class Vertex:
     def __init__(self,data):
@@ -8,8 +9,8 @@ class Vertex:
         self.distance = None
 
     def addNeighbour(self,nbr,cost=0):
-        if nbr not in self.connectedNodes:
-            self.connectedNodes[nbr] = cost
+        
+        self.connectedNodes[nbr] = cost
 
     def isVisited(self):
         return self.visited
@@ -37,26 +38,6 @@ class Graph:
         self.vertList[f].addNeighbour(self.vertList[t],cost)
         self.vertList[t].addNeighbour(self.vertList[f],cost)
 
-# def dijikstra(G,S):
-#     heap = [(0,S)]
-#     heapify(heap)
-#     G.vertList[S].distance = 0
-#     while len(heap) > 0:
-#         min_distance_vertex = heappop(heap)
-#         current_node = G.vertList[min_distance_vertex[1]]
-#         current_node.setVisited()
-#         for i in current_node.connectedNodes:
-#             if i.isVisited():
-#                 continue
-#             if i.distance > current_node.distance + current_node.connectedNodes[i]:
-#                 i.distance = current_node.distance + current_node.connectedNodes[i]
-
-                
-#         while len(heap) > 0:
-#             heappop(heap)
-#         heap = [(G.vertList[i].distance,i) for i in G.vertList if not G.vertList[i].isVisited()]
-#         heapify(heap)
-
 
 def dijikstra(G,S):
     heap = [(0,S)]
@@ -74,34 +55,33 @@ def dijikstra(G,S):
                 heappush(heap,(i.distance,i.data))
 
 
-                
-        
+# file = open("input.txt","r")
 
+t = int(stdin.readline())
+for _ in range(t):
+    n,m = map(int,stdin.readline().strip().split(" "))
+    G = Graph()
+    for i in range(1,n+1):
+        G.addVertex(i)
+        G.vertList[i].distance = float("Inf")
+    for i in range(m):
+        u,v,cost = map(int,stdin.readline().strip().split(" "))
+        vertex_u = G.vertList[u]
+        vertex_v = G.vertList[v]
+        if vertex_v in vertex_u.connectedNodes and vertex_u.connectedNodes[vertex_v] < cost:
+            continue
+        G.addEdge(u,v,cost)
+    s = int(stdin.readline())
+    dijikstra(G,s)
+    for i in range(1,n+1):
+        if i == s:
+            continue
+        if G.vertList[i].distance == float("Inf"):
+            print("-1",end=" ")
+        else:
+            if i == n :
+                print(G.vertList[i].distance)
+            else:
+                print(G.vertList[i].distance,end=" ")
 
-graph = Graph()
-for i in range(9):
-    graph.addVertex(i)
-    graph.vertList[i].distance = float("Inf")
-
-graph.addEdge(0, 1, 4) 
-graph.addEdge(0, 7, 8) 
-graph.addEdge(1, 2, 8) 
-graph.addEdge(1, 7, 11) 
-graph.addEdge(2, 3, 7) 
-graph.addEdge(2, 8, 2) 
-graph.addEdge(2, 5, 4) 
-graph.addEdge(3, 4, 9) 
-graph.addEdge(3, 5, 14) 
-graph.addEdge(4, 5, 10) 
-graph.addEdge(5, 6, 2) 
-graph.addEdge(6, 7, 1) 
-graph.addEdge(6, 8, 6) 
-graph.addEdge(7, 8, 7)
-
-dijikstra(graph,0)
-
-for i in graph.vertList:
-    print(graph.vertList[i].data,end=" ")
-    print(graph.vertList[i].distance)
-
-
+            
